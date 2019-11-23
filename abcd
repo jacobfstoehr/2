@@ -1,0 +1,488 @@
+-- Scripted by Jacob Stoehr
+
+	local players = game:GetService("Players")
+	local dataStoreService = game:GetService("DataStoreService")
+	
+	local dinosaurColorDataStore = dataStoreService:GetDataStore("DinosaurColorDataStore")
+	local dinosaurNameDataStore = dataStoreService:GetDataStore("DinosaurNameDataStore")
+	local dinosaurLevelDataStore = dataStoreService:GetDataStore("DinosaurLevelDataStore")
+	local dinosaurXPDataStore = dataStoreService:GetDataStore("DinosaurXPDataStore")
+	local leaderstatsDataStore = dataStoreService:GetDataStore("LeaderstatsDataStore")
+	local islandDataDataStore = dataStoreService:GetDataStore("IslandDataDataStore")
+
+	-- Constructor for indexing the player data into a dictionary
+
+	local dinosaurColorData = {
+		
+		["triceratopsColor"] = "Red",
+		["dracorexColor"] = "Red",
+		["moschopsColor"] = "Red",
+		["argentinosaurusColor"] = "Red",
+		["stegosaurusColor"] = "Red",
+		["tyrannosaurusColor"] = "Red",
+		["velociraptorColor"] = "Red",
+		["theropodsColor"] = "Red",
+		["allosaurusColor"] = "Red",
+		["diplodocusColor"] = "Red",
+		["oviraptorColor"] = "Red",
+		["ornithomimusColor"] = "Red",
+		["deinocheirusColor"] = "Red",
+		["protarchaeopteryxColor"] = "Red",
+		["pelecanimimusColor"] = "Red"
+		
+	}
+	
+	local dinosaurNameData = {
+		
+		["triceratopsName"] = "Triceratops",
+		["dracorexName"] = "Dracorex",
+		["moschopsName"] = "Moschops",
+		["argentinosaurusName"] = "Argentinosaurus",
+		["stegosaurusName"] = "Stegosaurus",
+		["tyrannosaurusName"] = "Tyrannosaurus",
+		["velociraptorName"] = "Velociraptor",
+		["theropodsName"] = "Theropods",
+		["allosaurusName"] = "Allosaurus",
+		["diplodocusName"] = "Diplodocus",
+		["oviraptorName"] = "Oviraptor",
+		["ornithomimusName"] = "Ornithomimus",
+		["deinocheirusName"] = "Deinocheirus",
+		["protarchaeopteryxName"] = "Protarchaeopteryx",
+		["pelecanimimusName"] = "Pelecanimimus"
+		
+	}
+	
+	local dinosaurLevelData = {
+		
+		["triceratopsLevel"] = 1,
+		["dracorexLevel"] = 1,
+		["moschopsLevel"] = 1,
+		["argentinosaurusLevel"] = 1,
+		["stegosaurusLevel"] = 1,
+		["tyrannosaurusLevel"] = 1,
+		["velociraptorLevel"] = 1,
+		["theropodsLevel"] = 1,
+		["allosaurusLevel"] = 1,
+		["diplodocusLevel"] = 1,
+		["oviraptorLevel"] = 1,
+		["ornithomimusLevel"] = 1,
+		["deinocheirusLevel"] = 1,
+		["protarchaeopteryxLevel"] = 1,
+		["pelecanimimusLevel"] = 1
+		
+	}
+	
+	local dinosaurXPData = {
+		
+		["triceratopsXP"] = 0,
+		["dracorexXP"] = 0,
+		["moschopsXP"] = 0,
+		["argentinosaurusXP"] = 0,
+		["stegosaurusXP"] = 0,
+		["tyrannosaurusXP"] = 0,
+		["velociraptorXP"] = 0,
+		["theropodsXP"] = 0,
+		["allosaurusXP"] = 0,
+		["diplodocusXP"] = 0,
+		["oviraptorXP"] = 0,
+		["ornithomimusXP"] = 0,
+		["deinocheirusXP"] = 0,
+		["protarchaeopteryxXP"] = 0,
+		["pelecanimimusXP"] = 0
+			
+	}
+	
+	local leaderstatsData = {
+		
+		["🦖Dinosaurs"] = 1,
+		["💎Gems"] = 0,
+		["💀Fossils"] = 0,
+		["💰Coins"] = 5000
+		
+	}
+	
+	local islandData = {
+		
+		["triassicBuyWall_1"] = false,
+		["triassicBuyWall_2"] = false,
+		["triassicBuyWall_3"] = false,
+		["triassicBuyWall_4"] = false,
+		
+		["jurassicBuyWall_1"] = false,
+		["jurassicBuyWall_2"] = false,
+		["jurassicBuyWall_3"] = false,
+		["jurassicBuyWall_4"] = false,
+		
+		["cretaceousBuyWall_1"] = false,
+		["cretaceousBuyWall_2"] = false,
+		["cretaceousBuyWall_3"] = false,
+		["cretaceousBuyWall_4"] = false,
+		
+		["ownIsland2"] = false,
+		["ownIsland3"] = false,
+		["ownIsland4"] = false,
+		
+		["doesNotOwnIsland2"] = true,
+		["doesNotOwnIsland3"] = true,
+		["doesNotOwnIsland4"] = true,
+		
+		["purchaseIsland2"] = false,
+		["purchaseIsland3"] = false,
+		["purchaseIsland4"] = false
+		
+	}
+	
+players.PlayerAdded:Connect(function(player)
+	
+	-- Create folders
+	
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+	
+	local playerFolder = Instance.new("Folder")
+	playerFolder.Name = "PlayerData"
+	playerFolder.Parent = player
+	
+	local dinosaurFolder = Instance.new("Folder")
+	dinosaurFolder.Name = "DinosaurData"
+	dinosaurFolder.Parent = player
+	
+	local islandDataFolder = Instance.new("Folder")
+	islandDataFolder.Name = "IslandData"
+	islandDataFolder.Parent = playerFolder
+	
+	local dinosaurStatsFolder = Instance.new("Folder")
+	dinosaurStatsFolder.Name = "DinosaurStats"
+	dinosaurStatsFolder.Parent = dinosaurFolder
+	
+		local levelsFolder = Instance.new("Folder")
+		levelsFolder.Name = "DinosaurLevels"
+		levelsFolder.Parent = dinosaurStatsFolder
+	
+		local xpFolder = Instance.new("Folder")
+		xpFolder.Name = "DinosaurXP"
+		xpFolder.Parent = dinosaurStatsFolder
+	
+		local nameFolder = Instance.new("Folder")
+		nameFolder.Name = "DinosaurName"
+		nameFolder.Parent = dinosaurStatsFolder
+		
+		local colorsFolder = Instance.new("Folder")
+		colorsFolder.Name = "DinosaurColors"
+		colorsFolder.Parent = dinosaurStatsFolder
+		
+	local DataFromColorStore = nil
+	local DataFromNameStore = nil
+	local DataFromLevelStore = nil
+	local DataFromXPStore = nil
+	local DataFromLeaderstatsStore = nil
+	local DataFromIslandStore = nil
+		
+	-- Dinosaur color data
+		
+	for name, value in pairs(dinosaurColorData) do
+		
+		local new = Instance.new("StringValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = colorsFolder
+		
+	end
+	
+	-- Dinosaur name data
+	
+	for name, value in pairs(dinosaurNameData) do
+		
+		local new = Instance.new("StringValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = nameFolder
+		
+	end
+	
+	-- Dinosaur level data
+	
+	for name, value in pairs(dinosaurLevelData) do
+		
+		local new = Instance.new("NumberValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = levelsFolder
+		
+	end
+	
+	-- Dinosaur xp data
+	
+	for name, value in pairs(dinosaurXPData) do
+		
+		local new = Instance.new("NumberValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = xpFolder
+		
+	end
+	
+	-- Leaderstats data
+	
+	for name, value in pairs(leaderstatsData) do
+		
+		local new = Instance.new("NumberValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = leaderstats
+		
+	end
+	
+	-- Island data
+	
+	for name, value in pairs(islandData) do
+		
+		local new = Instance.new("BoolValue")
+		new.Name = name
+		new.Value = value
+		new.Parent = islandDataFolder
+		
+	end
+	
+	--
+	
+	local s, e = pcall(function()
+		
+		DataFromColorStore = dinosaurColorDataStore:GetAsync("uid-" .. player.UserId)
+		DataFromNameStore = dinosaurNameDataStore:GetAsync("uid-" .. player.UserId)
+		DataFromLevelStore = dinosaurLevelDataStore:GetAsync("uid-" .. player.UserId)
+		DataFromXPStore = dinosaurXPDataStore:GetAsync("uid-" .. player.UserId)
+		DataFromLeaderstatsStore = leaderstatsDataStore:GetAsync("uid-" .. player.UserId)
+		DataFromIslandStore = islandDataDataStore:GetAsync("uid-" .. player.UserId)
+		
+	end)
+	
+	if s then
+		
+		print("Getting Data For: " .. player.Name)
+		
+		if DataFromColorStore then
+		
+			for name, value in pairs(DataFromColorStore) do
+			
+				colorsFolder[name].Value = value
+			
+			end
+		
+			print("Color Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New Color Data For: " .. player.Name)
+		
+		end
+		
+		if DataFromNameStore then
+		
+			for name, value in pairs(DataFromNameStore) do
+			
+				nameFolder[name].Value = value
+			
+			end
+		
+			print("Name Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New Name Data For: " .. player.Name)
+		
+		end
+		
+		if DataFromLevelStore then
+		
+			for name, value in pairs(DataFromLevelStore) do
+			
+				levelsFolder[name].Value = value
+			
+			end
+		
+			print("Level Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New Level Data For: " .. player.Name)
+		
+		end
+		
+		if DataFromXPStore then
+		
+			for name, value in pairs(DataFromXPStore) do
+			
+				xpFolder[name].Value = value
+			
+			end
+		
+			print("XP Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New XP Data For: " .. player.Name)
+		
+		end
+		
+		if DataFromLeaderstatsStore then
+		
+			for name, value in pairs(DataFromLeaderstatsStore) do
+			
+				leaderstats[name].Value = value
+			
+			end
+		
+			print("Leaderstats Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New Leaderstats Data For: " .. player.Name)
+		
+		end
+		
+		if DataFromIslandStore then
+		
+			for name, value in pairs(DataFromIslandStore) do
+			
+				islandDataFolder[name].Value = value
+			
+			end
+		
+			print("Island Data Loaded For: " .. player.Name)
+		
+		else
+		
+			print("Created New Island Data For: " .. player.Name)
+		
+		end
+		
+	elseif e then
+		
+		warn("Error Getting Data For: " .. player.Name)
+		
+	end
+	
+end)
+
+players.PlayerRemoving:Connect(function(player)
+	
+	local leaderstats = player.leaderstats
+	local playerFolder = player.PlayerData
+	local dinosaurFolder = player.DinosaurData
+	local islandDataFolder = player.PlayerData.IslandData
+	local dinosaurStatsFolder = player.DinosaurData.DinosaurStats
+		local levelsFolder = player.DinosaurData.DinosaurStats.DinosaurLevels
+		local xpFolder = player.DinosaurData.DinosaurStats.DinosaurXP
+		local nameFolder = player.DinosaurData.DinosaurStats.DinosaurName
+		local colorsFolder = player.DinosaurData.DinosaurStats.DinosaurColors
+	
+	local DataColorForStore = {}
+	local DataNameForStore = {}
+	local DataLevelForStore = {}
+	local DataXPForStore = {}
+	local DataLeaderstatsForStore = {}
+	local DataIslandForStore = {}
+	
+	-- Colors data
+	
+	for name, value in pairs(colorsFolder:GetChildren()) do
+		DataColorForStore[value.Name] = value.Value
+	end
+	
+	-- Name data
+	
+	for name, value in pairs(nameFolder:GetChildren()) do
+		DataNameForStore[value.Name] = value.Value
+	end
+	
+	-- Levels data
+	
+	for name, value in pairs(levelsFolder:GetChildren()) do
+		DataLevelForStore[value.Name] = value.Value
+	end
+	
+	-- XP data
+	
+	for name, value in pairs(xpFolder:GetChildren()) do
+		DataXPForStore[value.Name] = value.Value
+	end
+	
+	-- Leaderstats data
+	
+	for name, value in pairs(leaderstats:GetChildren()) do
+		DataLeaderstatsForStore[value.Name] = value.Value
+	end
+	
+	-- Island data
+	
+	for name, value in pairs(islandDataFolder:GetChildren()) do
+		DataIslandForStore[value.Name] = value.Value
+	end
+	
+	local colorSuccess = pcall(dinosaurColorDataStore.SetAsync, dinosaurColorDataStore, "uid-" .. player.UserId, DataColorForStore)
+	
+	if colorSuccess then
+		
+		print("Successfully Saved Color Data For: " .. player.Name)
+		
+	end
+	
+	local nameSuccess = pcall(dinosaurNameDataStore.SetAsync, dinosaurNameDataStore, "uid-" .. player.UserId, DataNameForStore)
+	
+	if nameSuccess then
+		
+		print("Successfully Saved Name Data For: " .. player.Name)
+		
+	end
+	
+	local levelSuccess = pcall(dinosaurLevelDataStore.SetAsync, dinosaurLevelDataStore, "uid-" .. player.UserId, DataLevelForStore)
+	
+	if levelSuccess then
+		
+		print("Successfully Saved Level Data For: " .. player.Name)
+		
+	end
+	
+	local xpSuccess = pcall(dinosaurXPDataStore.SetAsync, dinosaurXPDataStore, "uid-" .. player.UserId, DataXPForStore)
+	
+	if xpSuccess then
+		
+		print("Successfully Saved XP Data For: " .. player.Name)
+		
+	end
+	
+	local leaderstatsSuccess = pcall(leaderstatsDataStore.SetAsync, leaderstatsDataStore, "uid-" .. player.UserId, DataLeaderstatsForStore)
+	
+	if leaderstatsSuccess then
+		
+		print("Successfully Saved Leaderstats Data For: " .. player.Name)
+		
+	end
+	
+	local islandSuccess = pcall(islandDataDataStore.SetAsync, islandDataDataStore, "uid-" .. player.UserId, DataIslandForStore)
+	
+	if islandSuccess then
+		
+		print("Successfully Saved Island Data For: " .. player.Name)
+		
+	end
+	
+end)
+
+game:BindToClose(function()
+	
+	if not game:GetService("RunService"):IsStudio() then
+		
+ 		game:BindToClose(function()
+ 
+		print("Starting callback...")
+
+		end)
+
+	print("Done callback...")
+
+	end
+	
+end)
